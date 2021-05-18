@@ -176,6 +176,25 @@ module('Integration | Component | bs-form/element', function (hooks) {
     });
   });
 
+  testBS5('controlType "switch" is supported', async function (assert) {
+    await render(hbs`
+      <BsForm as |form|>
+        <form.element @controlType="switch" />
+      </BsForm>
+    `);
+
+    assert.dom('div.form-check.form-switch > input[type="checkbox"].form-check-input').exists({ count: 1 });
+    assert.dom('div.form-check.form-switch > label.form-check-label').exists({ count: 1 });
+
+    await controlTypeLayoutTest.call(this, assert, 'switch', 'input[type=checkbox]');
+    await controlTypeValueTest.call(this, assert, 'switch', 'input[type=checkbox]', [true, false], function () {
+      return this.checked;
+    });
+    await controlTypeUpdateTest.call(this, assert, 'switch', 'input[type=checkbox]', true, false, function () {
+      return click(this);
+    });
+  });
+
   test('controlType "textarea" is supported', async function (assert) {
     await controlTypeLayoutTest.call(this, assert, 'textarea', 'textarea', 'myValue');
     await controlTypeValueTest.call(this, assert, 'textarea', 'textarea', ['myValue', undefined]);
